@@ -21,12 +21,12 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
     all_chunks = []
 
     for doc in documents:
-        chunks = chunk_text(doc["text"])
+        chunks = chunk_text(doc["contents"])
 
-        for index, chunk in enumerate(chunks): # Read up on this 
+        for index, chunk in enumerate(chunks):
             chunk_dict = ({
-                "id": f"{doc['source']}::chunk-{index}",
-                "source": doc["source"],
+                "id": f"{doc['source']}::page-{doc['page_number']}::chunk-{index}",
+                "source": f"{doc['source']}::page-{doc['page_number']}",
                 "chunk_index": index, 
                 "text": chunk,
             })
