@@ -1,4 +1,4 @@
-# SourceRecall — Local RAG Assistant for Notes, Logs, and Documents
+# SourceRecall - Local RAG Assistant for Notes, Logs, and Documents
 
 SourceRecall is a local retrieval-augmented generation system for querying messy notes, logs, and documents with source-grounded answers.
 

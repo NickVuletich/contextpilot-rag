@@ -1,6 +1,6 @@
 from ingest import load_documents
 
-def chunk_text(text, chunk_size=700, overlap=100):
+def chunk_text(text: str, chunk_size: int = 700, overlap: int = 100) -> list[str]:
     if chunk_size <= overlap:
         raise ValueError("chunck_size must be greater than overlap")
 
@@ -17,13 +17,13 @@ def chunk_text(text, chunk_size=700, overlap=100):
         start += chunk_size - overlap
     return chunks
 
-def chunk_documents(documents):
+def chunk_documents(documents: list[dict]) -> list[dict]:
     all_chunks = []
 
     for doc in documents:
         chunks = chunk_text(doc["text"])
 
-        for index, chunk in enumerate(chunks):
+        for index, chunk in enumerate(chunks): # Read up on this 
             chunk_dict = ({
                 "id": f"{doc['source']}::chunk-{index}",
                 "source": doc["source"],

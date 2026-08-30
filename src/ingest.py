@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-def load_documents(data_dir):
+def load_documents(data_dir: str) -> list[dict]:
     data_dir = Path(data_dir)
 
     if not data_dir.exists():
