@@ -21,6 +21,7 @@ def build_vector_store() -> dict[str, int | str]:
     for chunk in chunks:
         metadatas.append({
             "source": chunk["source"],
+            "page": chunk["page"],
             "chunk_index": chunk["chunk_index"],
         })
 
