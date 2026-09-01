@@ -1,7 +1,7 @@
 import ollama
 from retrieve import retrieve_chunks
 
-def build_prompt(query, chunks):
+def build_prompt(query: str, chunks: list[dict]) -> str:
     context_blocks = []
 
     for chunk in chunks:
@@ -37,7 +37,7 @@ Answer:
     return prompt
 
 
-def generate_answer(query, chunks, model_name="llama3.2"):
+def generate_answer(query: str, chunks: list[dict], model_name: str = "llama3.2") -> str:
     prompt = build_prompt(query, chunks)
 
     response = ollama.generate(

@@ -16,6 +16,7 @@ outputs/
 data/private/
 data/raw/real_*.txt
 data/raw/*2025*.txt
+data/raw/12970_2017_Article_177.pdf
 
 # C extensions
 *.so

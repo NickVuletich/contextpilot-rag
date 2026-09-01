@@ -1,12 +1,14 @@
 from ingest import load_documents
 from chunk import chunk_documents
 from embed import load_embedding_model, embed_texts
+from chromadb.api.models.Collection import Collection
+from chromadb.api import ClientAPI
 import chromadb
 
 CHROMA_PATH = "chroma_db"
 COLLECTION_NAME = "sourcerecall_docs"
 
-def build_vector_store():
+def build_vector_store() -> dict[str, int | str]:
     documents = load_documents("data/raw")
     chunks = chunk_documents(documents)
     texts = [chunk["text"] for chunk in chunks]
@@ -19,6 +21,7 @@ def build_vector_store():
     for chunk in chunks:
         metadatas.append({
             "source": chunk["source"],
+            "page": chunk["page"],
             "chunk_index": chunk["chunk_index"],
         })
 
@@ -42,11 +45,11 @@ def build_vector_store():
     }
     return summary_dict
 
-def get_chroma_client(path=CHROMA_PATH):
+def get_chroma_client(path: str = CHROMA_PATH) -> ClientAPI:
     client = chromadb.PersistentClient(path=path)
     return client
 
-def reset_collection(client, collection_name=COLLECTION_NAME):
+def reset_collection(client: ClientAPI, collection_name: str = COLLECTION_NAME) -> Collection:
     try:
         client.delete_collection(name=collection_name)
     except Exception:

@@ -2,7 +2,7 @@ import chromadb
 from embed import load_embedding_model, embed_texts
 from store import CHROMA_PATH, COLLECTION_NAME
 
-def retrieve_chunks(query, top_k=3):
+def retrieve_chunks(query: str, top_k: int = 3) -> list[dict]:
     client = chromadb.PersistentClient(path=CHROMA_PATH)
     collection = client.get_collection(name=COLLECTION_NAME)
 
