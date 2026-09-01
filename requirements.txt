@@ -6,3 +6,4 @@ pydantic
 typer
 rich
 pypdf
+streamlit
