@@ -1,4 +1,9 @@
 from ingest import load_documents
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+data_folder = os.getenv("DATA_FOLDER", "data/demo")
 
 def chunk_text(text: str, chunk_size: int = 700, overlap: int = 100) -> list[str]:
     if chunk_size <= overlap:
@@ -36,7 +41,7 @@ def chunk_documents(documents: list[dict]) -> list[dict]:
     return all_chunks
 
 if __name__ == "__main__":
-    documents = load_documents("data/raw")
+    documents = load_documents(data_folder)
     chunks = chunk_documents(documents)
 
     print(f"Loaded documents: {len(documents)}")
