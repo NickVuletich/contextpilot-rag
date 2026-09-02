@@ -4,7 +4,7 @@ SourceRecall is a retrieval-augmented generation system for querying notes, tech
 
 It was built from the ground up to understand the individual components of a practical RAG pipeline rather than hiding retrieval behind a high-level framework.
 
-### [Try the live SourceRecall demo](https://sourcerecall.streamlit.app)
+### [Try the live SourceRecall demo](https://source-recall.streamlit.app/)
 
 ![SourceRecall public demo](assets/sourcerecall-demo.png)
 
@@ -101,7 +101,7 @@ I intentionally avoided using a high-level RAG framework so I could understand h
                               │
                               ▼
              ┌─────────────────────────────────┐
-             │ Grounded Answer + Source Pages │
+             │ Grounded Answer + Source Pages  │
              └─────────────────────────────────┘
 ```
 
@@ -205,7 +205,7 @@ The current interface does not display the full retrieved passages and does not 
 
 The deployed application is available at:
 
-**https://sourcerecall.streamlit.app**
+**https://source-recall.streamlit.app/**
 
 The public demo currently indexes:
 
@@ -465,7 +465,7 @@ SourceRecall v2 includes:
 - automatic vector-store initialization when a collection does not exist
 - public deployment
 
-**Live demo:** https://sourcerecall.streamlit.app
+**Live demo:** https://source-recall.streamlit.app/
 
 Current retrieval baseline:
 
