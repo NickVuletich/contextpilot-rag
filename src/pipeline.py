@@ -2,6 +2,7 @@ import sys
 from store import build_vector_store
 from retrieve import retrieve_chunks
 from generate import generate_answer
+import os
 import json
 
 PRINT = False
@@ -34,11 +35,16 @@ def main():
     elif command == "eval":
         eval_results = []
 
+        hit_at_1 = 0
+        hit_at_3 = 0
+        hit_at_5 = 0
+
         with open("eval/retrieval_questions.json", "r") as file:
             questions = json.load(file)
 
         for question in questions:
             query = question['question']
+            expected_page = question["expected_page"]
             chunks = retrieve_chunks(query, 5)
 
             retrieved = []
@@ -50,33 +56,76 @@ def main():
                     "page": chunk["metadata"]["page"],
                     "distance": chunk["distance"],
                 })
+
+            expected = (
+                question["expected_source"],
+                question["expected_page"],
+            )
+
+            retrieved_locations = [
+                (item["source"], item["page"])
+                for item in retrieved
+            ]
+
+            hit_1 = expected in retrieved_locations[:1]
+            hit_3 = expected in retrieved_locations[:3]
+            hit_5 = expected in retrieved_locations[:5]
+
+            hit_at_1 += int(hit_1)
+            hit_at_3 += int(hit_3)
+            hit_at_5 += int(hit_5)
             
             result = {
                 "id": question["id"],
                 "question": query,
                 "expected_source": question["expected_source"],
                 "expected_page": question["expected_page"],
+                "hit_at_1": hit_1,
+                "hit_at_3": hit_3,
+                "hit_at_5": hit_5,
                 "retrieved": retrieved,
             }
 
             eval_results.append(result)
 
-        with open("outputs/retrieval_eval.json", "w") as file:
-            json.dump(eval_results, file, indent=2)
+            if PRINT:
+                print("\nQuestion:")
+                print(query)
+                    
+                print("\nRetrieved Sources:")
+                for chunk in chunks:
+                    source = chunk["metadata"]["source"]
+                    distance = chunk["distance"]
+                    print(f"- {source} | distance={distance:.4f}")
+                    
+                print(f"\n Question ID: {question['id']}")
+                print(f"\nExpected Source: {question['expected_source']}")
+                print(f"\nExpected Page: {question['expected_page']}")
 
-        if PRINT:
-            print("\nQuestion:")
-            print(query)
-                
-            print("\nRetrieved Sources:")
-            for chunk in chunks:
-                source = chunk["metadata"]["source"]
-                distance = chunk["distance"]
-                print(f"- {source} | distance={distance:.4f}")
-                
-            print(f"\n Question ID: {question['id']}")
-            print(f"\nExpected Source: {question['expected_source']}")
-            print(f"\nExpected Page: {question['expected_page']}")
+        total = len(questions)
+
+        summary = {
+            "question_count": total,
+            "hit_at_1": hit_at_1 / total,
+            "hit_at_3": hit_at_3 / total,
+            "hit_at_5": hit_at_5 / total,
+        }
+
+        output = {
+            "summary": summary,
+            "results": eval_results,
+        }
+
+        os.makedirs("outputs", exist_ok=True)
+
+        with open("outputs/retrieval_eval.json", "w") as file:
+            json.dump(output, file, indent=2)
+
+        print("\nRetrieval Evaluation")
+        print(f"Questions: {total}")
+        print(f"Hit@1: {summary['hit_at_1']:.0%}")
+        print(f"Hit@3: {summary['hit_at_3']:.0%}")
+        print(f"Hit@5: {summary['hit_at_5']:.0%}")
                 
 
     elif command == "ask":

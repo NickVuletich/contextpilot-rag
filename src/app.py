@@ -31,6 +31,13 @@ with st.sidebar:
     - What is sensitive information disclosure?
     """)
 
+with st.sidebar:
+    st.header("Demo Document")
+    # your existing sidebar stuff...
+
+    st.divider()
+    st.caption("SourceRecall v2.0.0")
+
 with st.form("query_form"):
     query = st.text_input("Ask a question")
 

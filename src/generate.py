@@ -10,9 +10,10 @@ def build_prompt(query: str, chunks: list[dict]) -> str:
 
     for chunk in chunks:
         source = chunk["metadata"]["source"]
+        page = chunk["metadata"]["page"]
         text = chunk["text"]
 
-        context_block = f"[Source: {source}]\n{text}"
+        context_block = f"[Source: {source}, Page: {page}]\n{text}"
         context_blocks.append(context_block)
 
     context_string = "\n\n".join(context_blocks)
