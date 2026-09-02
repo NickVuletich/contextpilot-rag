@@ -4,12 +4,17 @@ from embed import load_embedding_model, embed_texts
 from chromadb.api.models.Collection import Collection
 from chromadb.api import ClientAPI
 import chromadb
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+data_folder = os.getenv("DATA_FOLDER", "data/demo")
 
 CHROMA_PATH = "chroma_db"
 COLLECTION_NAME = "sourcerecall_docs"
 
 def build_vector_store() -> dict[str, int | str]:
-    documents = load_documents("data/raw")
+    documents = load_documents(data_folder)
     chunks = chunk_documents(documents)
     texts = [chunk["text"] for chunk in chunks]
     model = load_embedding_model()

@@ -7,16 +7,20 @@ from generate import generate_answer
 st.title("SourceRecall")
 st.write("Ask questions about your documents.")
 
-query = st.text_input("Ask a question")
-top_k = st.number_input(
-    "Number of sources to retrieve. (1-5)",
-    min_value=1,
-    max_value=5,
-    value=3,
-    step=1
+with st.form("query_form"):
+    query = st.text_input("Ask a question")
+
+    top_k = st.number_input(
+        "Number of sources to retrieve (1-5)",
+        min_value=1,
+        max_value=5,
+        value=3,
+        step=1
     )
 
-if st.button("Ask SourceRecall"):
+    submitted = st.form_submit_button("Ask SourceRecall")
+
+if submitted:
     if query.strip():
         with st.spinner("Searching documents and generating answer..."):
             chunks = retrieve_chunks(query, top_k)
@@ -24,11 +28,12 @@ if st.button("Ask SourceRecall"):
 
         st.subheader("Answer:")
         st.write(answer)
+
         st.subheader("Retrieved Sources")
 
         for chunk in chunks:
-            filename = Path(chunk['metadata']['source']).name
-            page = chunk['metadata']['page']
+            filename = Path(chunk["metadata"]["source"]).name
+            page = chunk["metadata"]["page"]
             distance = chunk["distance"]
 
             st.markdown(

@@ -1,5 +1,9 @@
 import ollama
 from retrieve import retrieve_chunks
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def build_prompt(query: str, chunks: list[dict]) -> str:
     context_blocks = []
@@ -14,7 +18,7 @@ def build_prompt(query: str, chunks: list[dict]) -> str:
     context_string = "\n\n".join(context_blocks)
 
     prompt = f"""
-You are SourceRecall, a local RAG assistant.
+You are SourceRecall, a RAG assistant.
 
 Use only the retrieved context below to answer the user's question.
 
@@ -37,7 +41,7 @@ Answer:
     return prompt
 
 
-def generate_answer(query: str, chunks: list[dict], model_name: str = "llama3.2") -> str:
+def ollama_generate_answer(query: str, chunks: list[dict], model_name: str = "llama3.2") -> str:
     prompt = build_prompt(query, chunks)
 
     response = ollama.generate(
@@ -49,6 +53,23 @@ def generate_answer(query: str, chunks: list[dict], model_name: str = "llama3.2"
     )
 
     return response["response"]
+
+def generate_answer(query: str, chunks: list[dict], model_name: str = "openai/gpt-oss-20b") -> str:
+    prompt = build_prompt(query, chunks)
+    client = Groq()
+
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.1
+    )
+
+    return response.choices[0].message.content
 
 
 if __name__ == "__main__":

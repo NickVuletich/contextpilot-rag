@@ -2,6 +2,12 @@ from sentence_transformers import SentenceTransformer
 from ingest import load_documents
 from chunk import chunk_documents
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+data_folder = os.getenv("DATA_FOLDER", "data/demo")
+
 def load_embedding_model(model_name: str = "all-MiniLM-L6-v2") -> SentenceTransformer:
     model = SentenceTransformer(model_name)
     return model
@@ -14,7 +20,7 @@ def embed_texts(texts: str, model: SentenceTransformer) -> list[str]:
 if __name__ == "__main__":
     model = load_embedding_model()
 
-    documents = load_documents("data/raw")
+    documents = load_documents(data_folder)
     chunks = chunk_documents(documents)
 
     texts = [chunk["text"] for chunk in chunks]

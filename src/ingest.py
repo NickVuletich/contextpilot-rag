@@ -1,6 +1,11 @@
 from pathlib import Path
 import os
 from pypdf import PdfReader
+from dotenv import load_dotenv
+
+load_dotenv()
+
+data_folder = os.getenv("DATA_FOLDER", "data/demo")
 
 
 def load_documents(data_dir: str) -> list[dict]:
@@ -39,7 +44,7 @@ def load_documents(data_dir: str) -> list[dict]:
     return documents
 
 if __name__ == "__main__":
-    list_docs = load_documents("data/raw")
+    list_docs = load_documents(data_folder)
     print(f"Number of documents is: {len(list_docs)}")
 
     for doc in list_docs:
