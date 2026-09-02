@@ -1,11 +1,35 @@
 import streamlit as st
-from pathlib import Path
 
+from pathlib import Path
 from retrieve import retrieve_chunks
 from generate import generate_answer
+from store import ensure_vector_store
+
+st.set_page_config(
+    page_title="SourceRecall",
+    layout="wide"
+)
+
+
+@st.cache_resource
+def initialize_vector_store():
+    ensure_vector_store()
+
+initialize_vector_store()
 
 st.title("SourceRecall")
 st.write("Ask questions about your documents.")
+
+with st.sidebar:
+    st.header("Demo Document")
+    st.write("OWASP Top 10 for LLM Applications 2025")
+
+    st.subheader("Try asking")
+    st.markdown("""
+    - What is prompt injection?
+    - What risks are caused by excessive agency?
+    - What is sensitive information disclosure?
+    """)
 
 with st.form("query_form"):
     query = st.text_input("Ask a question")
@@ -20,24 +44,31 @@ with st.form("query_form"):
 
     submitted = st.form_submit_button("Ask SourceRecall")
 
+
 if submitted:
     if query.strip():
         with st.spinner("Searching documents and generating answer..."):
             chunks = retrieve_chunks(query, top_k)
             answer = generate_answer(query, chunks)
 
-        st.subheader("Answer:")
-        st.write(answer)
+        answer_col, sources_col = st.columns([2, 1])
 
-        st.subheader("Retrieved Sources")
+        with answer_col:
+            st.subheader("Answer")
+            st.write(answer)
 
-        for chunk in chunks:
-            filename = Path(chunk["metadata"]["source"]).name
-            page = chunk["metadata"]["page"]
-            distance = chunk["distance"]
+        with sources_col:
+            st.subheader("Retrieved Sources")
 
-            st.markdown(
-                f"- **{filename}** — page {page} | distance `{distance:.4f}`"
-            )
+            for chunk in chunks:
+                filename = Path(chunk["metadata"]["source"]).name
+                page = chunk["metadata"]["page"]
+                distance = chunk["distance"]
+
+                st.markdown(
+                    f"**{filename}**  \n"
+                    f"Page {page} | distance `{distance:.4f}`"
+                )
+
     else:
         st.error("Please enter a question.")
