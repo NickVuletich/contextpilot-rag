@@ -17,8 +17,26 @@ def ensure_vector_store() -> None:
     client = get_chroma_client()
 
     try:
-        client.get_collection(name=COLLECTION_NAME)
+        collection = client.get_collection(name=COLLECTION_NAME)
     except Exception:
+        build_vector_store()
+        return
+
+    indexed = collection.get(include=["metadatas"])
+
+    indexed_sources = {
+        metadata["source"]
+        for metadata in indexed["metadatas"]
+    }
+
+    documents = load_documents(data_folder)
+
+    current_sources = {
+        document["source"]
+        for document in documents
+    }
+
+    if indexed_sources != current_sources:
         build_vector_store()
 
 def build_vector_store() -> dict[str, int | str]:
