@@ -16,7 +16,7 @@ st.title("SourceRecall")
 st.write("Ask questions about your documents.")
 
 with st.sidebar:
-    st.header("Demo Document")
+    st.header("Demo Documents")
     st.write("OWASP Top 10 for LLM Applications 2025")
 
     st.subheader("Try asking")
@@ -29,8 +29,7 @@ with st.sidebar:
 
     st.divider()
 
-    st.header("Demo Document")
-    st.write("Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile")
+    st.write(" NIST AI RMF: Generative AI Profile")
     
     st.subheader("Try asking")
     st.markdown("""
