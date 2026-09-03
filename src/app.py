@@ -29,14 +29,23 @@ with st.sidebar:
     - What is prompt injection?
     - What risks are caused by excessive agency?
     - What is sensitive information disclosure?
+    - Why might pre-deployment testing fail to accurately represent how a generative AI system behaves in the real world?
     """)
 
-with st.sidebar:
-    st.header("Demo Document")
-    # your existing sidebar stuff...
-
     st.divider()
-    st.caption("SourceRecall v2.0.0")
+
+    st.header("Demo Document")
+    st.write("Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile")
+    
+    st.subheader("Try asking")
+    st.markdown("""
+    - Why might pre-deployment testing fail to accurately represent how a generative AI system behaves in the real world?
+    - What two primary information security risks does NIST identify for generative AI systems?
+    - What does NIST mean by confabulation in a generative AI system?
+        """)
+    
+    st.divider()
+    st.caption("SourceRecall v2.0.1")
 
 with st.form("query_form"):
     query = st.text_input("Ask a question")
