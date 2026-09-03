@@ -203,6 +203,10 @@ The current interface does not display the full retrieved passages and does not 
 
 ## Public Demo
 
+The public demo currently indexes two technical PDF documents, allowing SourceRecall to retrieve across a small multi-document collection rather than a single source.
+
+This makes the retrieval problem more realistic: semantically related chunks from multiple documents compete for the same top-k retrieval positions.
+
 The deployed application is available at:
 
 **https://source-recall.streamlit.app/**
@@ -210,6 +214,8 @@ The deployed application is available at:
 The public demo currently indexes:
 
 **OWASP Top 10 for LLM Applications 2025**
+
+**Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile**
 
 Example questions include:
 
@@ -385,6 +391,22 @@ The baseline uses:
 
 This benchmark evaluates retrieval within a single technical PDF and is intended to establish a reproducible experimental baseline within that benchmark setup rather than claim general retrieval performance across arbitrary document collections.
 
+### Multi-Document Retrieval Evaluation
+
+SourceRecall was also evaluated on a two-document collection using a separate 25-question retrieval benchmark.
+
+| Metric | Result |
+| --- | ---: |
+| Hit@1 | **52%** |
+| Hit@3 | **60%** |
+| Hit@5 | **68%** |
+
+This evaluation represents a different and more difficult retrieval setting than the original single-document benchmark. Multiple documents can contain semantically similar terminology, creating cross-document competition within the top-k retrieved chunks.
+
+Because the multi-document benchmark uses a different document collection and evaluation question set, these scores should not be interpreted as a direct before-and-after comparison with the original single-document results.
+
+The multi-document evaluation provides a new baseline for future work involving document-aware retrieval, reranking, hybrid retrieval, and other approaches designed to reduce cross-document confusion.
+
 ### Observed Failure Mode
 
 One notable failure mode occurred with bibliography and reference pages.
@@ -467,8 +489,14 @@ SourceRecall v2 includes:
 
 **Live demo:** https://source-recall.streamlit.app/
 
-Current retrieval baseline:
+Current retrieval benchmarks:
 
+**Single-document benchmark**
 - Hit@1: **48%**
 - Hit@3: **80%**
 - Hit@5: **92%**
+
+**Two-document benchmark**
+- Hit@1: **52%**
+- Hit@3: **60%**
+- Hit@5: **68%**

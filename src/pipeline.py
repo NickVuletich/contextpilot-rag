@@ -39,7 +39,7 @@ def main():
         hit_at_3 = 0
         hit_at_5 = 0
 
-        with open("eval/retrieval_questions.json", "r") as file:
+        with open("eval/demo_retrieval_questions.json", "r") as file:
             questions = json.load(file)
 
         for question in questions:
@@ -66,6 +66,13 @@ def main():
                 (item["source"], item["page"])
                 for item in retrieved
             ]
+
+            print("\nEXPECTED TUPLE:")
+            print(expected)
+
+            print("\nRETRIEVED TUPLES:")
+            for location in retrieved_locations:
+                print(location)
 
             hit_1 = expected in retrieved_locations[:1]
             hit_3 = expected in retrieved_locations[:3]
@@ -118,7 +125,7 @@ def main():
 
         os.makedirs("outputs", exist_ok=True)
 
-        with open("outputs/retrieval_eval.json", "w") as file:
+        with open("outputs/demo_retrieval_eval.json", "w") as file:
             json.dump(output, file, indent=2)
 
         print("\nRetrieval Evaluation")
