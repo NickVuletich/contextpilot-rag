@@ -10,12 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-
-@st.cache_resource
-def initialize_vector_store():
-    ensure_vector_store()
-
-initialize_vector_store()
+ensure_vector_store()
 
 st.title("SourceRecall")
 st.write("Ask questions about your documents.")
